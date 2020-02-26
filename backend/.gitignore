@@ -1,1 +1,7 @@
 /node_modules
+.env
+todo.txt
+todoAdmin.txt
+todoDelivery.txt
+done.txt
+documentation.md
