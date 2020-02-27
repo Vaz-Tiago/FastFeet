@@ -1,0 +1,73 @@
+<style>
+  table {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 25px
+    color: #222;
+  }
+  thead {
+    text-align: center;
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  tfoot {
+    text-align: center;
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  td {
+    padding: 10px;
+  }
+</style>
+
+<strong>
+  Boas novas {{ deliveryman }}
+</strong>
+<p>
+  Aqui estão os detalhes da sua nova entrega:
+</p>
+
+<table>
+
+  <thead>
+    <tr>
+      <td colspan="3">
+        <strong>Entrega</strong>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><strong>Produto</strong></td>
+      <td >{{ product }}</td>
+    </tr>
+
+    <tr>
+      <td><strong>Destinatário</strong></td>
+      <td>{{ name }}</td>
+    </tr>
+
+    <tr>
+      <td><strong>Endereço</strong></td>
+      <td>
+        {{ adress }}, {{ number}} - {{ complement }} - {{ city }}  / {{ state }}
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>CEP</strong></td>
+      <td>{{ zipcode }}</td>
+    </tr>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        Lembre-se, retiradas apenas entre 8:00h e 18:00h
+      </td>
+    </tr>
+  </tfoot>
+
+</table>
+
