@@ -14,7 +14,6 @@ class DeliveryController {
 
     const deliveries = await Delivery.findAll({
       where: { canceled_at: null },
-      order: ["updated_at"],
       attributes: [
         "id",
         "product",
@@ -124,11 +123,99 @@ class DeliveryController {
   }
 
   async update(req, res) {
-    return res.json({ msg: "update" });
+    const { id } = req.params;
+    const delivery = await Delivery.findByPk(id);
+
+    if (!delivery) {
+      return res
+        .status(400)
+        .json({ Error: "Delivery not found. Check the ID and try again" });
+    }
+
+    const schema = Yup.object().shape({
+      deliveryman_id: Yup.number(),
+      recipient_id: Yup.number(),
+      product: Yup.string()
+    });
+
+    if (!(await schema.isValid())) {
+      return res.status(400).json({
+        Error: "Validate fails"
+      });
+    }
+
+    const { recipient_id: recipient, deliveryman_id: deliveryman } = req.body;
+
+    if (recipient) {
+      const recipientExists = await Recipient.findOne({
+        where: { id: recipient }
+      });
+
+      if (!recipientExists) {
+        return res.status(400).json({ Error: "Recipient does not exists." });
+      }
+    }
+
+    if (deliveryman) {
+      const deliverymanExists = await Deliveryman.findOne({
+        where: { id: deliveryman }
+      });
+
+      if (!deliverymanExists) {
+        return res.status(400).json({ Error: "Deliveryman does not exists." });
+      }
+    }
+
+    await delivery.update(req.body);
+
+    const deliveryUpdated = await Delivery.findOne({
+      where: { id },
+      attributes: ["id", "product"],
+      include: [
+        {
+          model: Deliveryman,
+          as: "deliveryman",
+          attributes: ["id", "name"],
+          include: [
+            {
+              model: FileAvatar,
+              as: "avatar",
+              attributes: ["id", "path", "url"]
+            }
+          ]
+        },
+        {
+          model: Recipient,
+          as: "recipient",
+          attributes: [
+            "id",
+            "name",
+            "adress",
+            "number",
+            "complement",
+            "city",
+            "state",
+            "zipcode"
+          ]
+        }
+      ]
+    });
+
+    return res.json(deliveryUpdated);
   }
 
   async delete(req, res) {
-    return res.json({ msg: "delete" });
+    const deliveryId = req.params.id;
+    const delivery = await Delivery.findByPk(deliveryId);
+    if (!delivery) {
+      return res.status(400).json({ Error: "Delivery not found" });
+    }
+
+    await Delivery.destroy({
+      where: { id: deliveryId }
+    });
+
+    return res.json({ Success: "Delivery Deleted" });
   }
 }
 
