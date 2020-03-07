@@ -67,7 +67,7 @@ class DeliveryController {
       return res.status(400).json({ Error: "Validate fails" });
     }
 
-    // Check recipient id is valid
+    // Check deliveryman id is valid
     const deliveryman = await Deliveryman.findByPk(req.body.deliveryman_id);
     if (!deliveryman) {
       return res

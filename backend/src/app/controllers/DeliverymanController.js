@@ -51,7 +51,7 @@ class DeliverymanController {
   }
 
   async update(req, res) {
-    const { id } = req.params;
+    const { id } = +req.params;
 
     const deliveryman = await Deliveryman.findByPk(id);
 
@@ -94,7 +94,7 @@ class DeliverymanController {
   }
 
   async delete(req, res) {
-    const deliverymanId = req.params.id;
+    const deliverymanId = +req.params.id;
 
     const verifyDeliveryman = await Deliveryman.findByPk(deliverymanId);
 
