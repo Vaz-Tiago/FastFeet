@@ -12,6 +12,7 @@ import FileSignatureController from "./app/controllers/FileSignatureController";
 import DeliveryController from "./app/controllers/DeliveryController";
 import OrderController from "./app/controllers/OrderController";
 import FinishedOrdersController from "./app/controllers/FinishedOrdersController";
+import DeliveryProblemController from "./app/controllers/DeliveryProblemController";
 
 import auth from "./app/middlewares/auth";
 
@@ -20,7 +21,7 @@ const routes = new Router();
 const avatarUpload = multer(multerConfigAvatar);
 const signatureUpload = multer(multerConfigSignature);
 
-// Deliveryman - User
+// DeliverymanOrders - User
 routes.get("/deliveryman/:id/orders", OrderController.show);
 routes.get("/deliveryman/:id/deliveries", FinishedOrdersController.show);
 routes.put("/delivery/:id/start", OrderController.startOrder);
@@ -30,9 +31,18 @@ routes.put(
   OrderController.finishOrder
 );
 
+// DeliveryProblem - User
+routes.post("/delivery/:id/problems", DeliveryProblemController.store);
+
 routes.post("/session", SessionController.store);
 
+// Access filter route
 routes.use(auth);
+
+// Delivery problems - Admin
+routes.get("/delivery/problems", DeliveryProblemController.index);
+routes.get("/delivery/:id/problems", DeliveryProblemController.show);
+routes.delete("/delivery/:id/problems", DeliveryProblemController.delete);
 
 // Recipients
 routes.post("/recipients", RecipientController.store);
@@ -50,7 +60,7 @@ routes.post(
   FileAvatarController.store
 );
 
-// Deliveries
+// Deliveries - Admin
 routes.get("/delivery", DeliveryController.index);
 routes.post("/delivery", DeliveryController.store);
 routes.put("/delivery/:id", DeliveryController.update);

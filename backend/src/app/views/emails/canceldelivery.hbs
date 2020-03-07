@@ -1,0 +1,68 @@
+<style>
+  table {
+    border: 1px solid #6b1a1a;
+    border-radius: 4px;
+    margin: 25px
+    color: #222;
+  }
+  thead {
+    text-align: center;
+    background-color: #6b1a1a;
+    border-radius: 4px;
+    color: #ccc;
+  }
+
+  td {
+    padding: 10px;
+  }
+</style>
+
+<strong>
+  Olá, {{ deliveryman }}
+</strong>
+<p>
+  Segue os detalhes da entrega cancelada:
+</p>
+
+<table>
+
+  <thead>
+    <tr>
+      <td colspan="3">
+        <strong>CANCELADA</strong>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td><strong>ID Entrega</strong></td>
+      <td >{{ id }}</td>
+    </tr>
+
+    <tr>
+      <td><strong>Produto</strong></td>
+      <td >{{ product }}</td>
+    </tr>
+
+    <tr>
+      <td><strong>Destinatário</strong></td>
+      <td>{{ name }}</td>
+    </tr>
+
+    <tr>
+      <td><strong>Endereço</strong></td>
+      <td>
+        {{ adress }}, {{ number}} - {{ complement }} - {{ city }}  / {{ state }}
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>CEP</strong></td>
+      <td>{{ zipcode }}</td>
+    </tr>
+  </tbody>
+
+</table>
+

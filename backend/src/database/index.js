@@ -6,6 +6,7 @@ import FileAvatar from "../app/models/FileAvatar";
 import Deliveryman from "../app/models/Deliveryman";
 import FileSignature from "../app/models/FileSignature";
 import Delivery from "../app/models/Delivery";
+import DeliveryProblem from "../app/models/DeliveryProblem";
 
 import databaseConfig from "../config/database";
 
@@ -15,7 +16,8 @@ const models = [
   FileAvatar,
   Deliveryman,
   FileSignature,
-  Delivery
+  Delivery,
+  DeliveryProblem
 ];
 
 class Database {
