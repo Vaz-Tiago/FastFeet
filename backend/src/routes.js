@@ -32,7 +32,7 @@ routes.put(
 );
 
 // DeliveryProblem - User
-routes.post("/delivery/:id/problems", DeliveryProblemController.store);
+routes.post("/delivery/problems", DeliveryProblemController.store);
 
 routes.post("/session", SessionController.store);
 
@@ -42,7 +42,7 @@ routes.use(auth);
 // Delivery problems - Admin
 routes.get("/delivery/problems", DeliveryProblemController.index);
 routes.get("/delivery/:id/problems", DeliveryProblemController.show);
-routes.delete("/delivery/:id/problems", DeliveryProblemController.delete);
+routes.delete("/problem/:id/cancel-delivery", DeliveryProblemController.delete);
 
 // Recipients
 routes.post("/recipients", RecipientController.store);
