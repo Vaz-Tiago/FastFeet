@@ -1,14 +1,14 @@
-import Sequelize from "sequelize";
+import Sequelize from 'sequelize';
 
-import User from "../app/models/User";
-import Recipient from "../app/models/Recipient";
-import FileAvatar from "../app/models/FileAvatar";
-import Deliveryman from "../app/models/Deliveryman";
-import FileSignature from "../app/models/FileSignature";
-import Delivery from "../app/models/Delivery";
-import DeliveryProblem from "../app/models/DeliveryProblem";
+import User from '../app/models/User';
+import Recipient from '../app/models/Recipient';
+import FileAvatar from '../app/models/FileAvatar';
+import Deliveryman from '../app/models/Deliveryman';
+import FileSignature from '../app/models/FileSignature';
+import Delivery from '../app/models/Delivery';
+import DeliveryProblem from '../app/models/DeliveryProblem';
 
-import databaseConfig from "../config/database";
+import databaseConfig from '../config/database';
 
 const models = [
   User,

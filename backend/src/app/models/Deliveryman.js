@@ -1,4 +1,4 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize, { Model } from 'sequelize';
 
 class Deliveryman extends Model {
   static init(sequelize) {
@@ -9,7 +9,7 @@ class Deliveryman extends Model {
       },
       {
         sequelize,
-        tableName: "deliverymen"
+        tableName: 'deliverymen'
       }
     );
     return this;
@@ -17,8 +17,8 @@ class Deliveryman extends Model {
 
   static associate(models) {
     this.belongsTo(models.FileAvatar, {
-      foreignKey: "avatar_id",
-      as: "avatar"
+      foreignKey: 'avatar_id',
+      as: 'avatar'
     });
   }
 }

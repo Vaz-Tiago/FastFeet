@@ -1,20 +1,20 @@
-import * as Yup from "yup";
-import Deliveryman from "../models/Deliveryman";
-import FileAvatar from "../models/FileAvatar";
+import * as Yup from 'yup';
+import Deliveryman from '../models/Deliveryman';
+import FileAvatar from '../models/FileAvatar';
 
 class DeliverymanController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
     const deliverymen = await Deliveryman.findAll({
-      attributes: ["id", "name", "email"],
+      attributes: ['id', 'name', 'email'],
       limit: 20,
       offset: (page - 1) * 20,
       include: [
         {
           model: FileAvatar,
-          as: "avatar",
-          attributes: ["id", "path", "url"]
+          as: 'avatar',
+          attributes: ['id', 'path', 'url']
         }
       ]
     });
@@ -22,6 +22,10 @@ class DeliverymanController {
   }
 
   async store(req, res) {
+    if (!req.file) {
+      return res.status(400).json({ Error: 'You need upload the avatar' });
+    }
+    const { originalname: name, filename: path } = req.file;
     const Schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
@@ -30,7 +34,7 @@ class DeliverymanController {
     });
 
     if (!(await Schema.isValid(req.body))) {
-      return res.status(400).json({ error: "Validation Fails" });
+      return res.status(400).json({ error: 'Validation Fails' });
     }
 
     const userExists = await Deliveryman.findOne({
@@ -38,16 +42,24 @@ class DeliverymanController {
     });
 
     if (userExists) {
-      return res.status(400).json({ error: "Deliveryman already exists" });
+      return res.status(400).json({ error: 'Deliveryman already exists' });
     }
 
-    const { id, name, email } = await Deliveryman.create(req.body);
-
-    return res.json({
-      id,
+    const avatarUpdate = await FileAvatar.create({
       name,
-      email
+      path
     });
+
+    const avatarId = avatarUpdate.id;
+
+    const deliveryman = await Deliveryman.create({
+      id: req.body.id,
+      name: req.body.name,
+      email: req.body.email,
+      avatar_id: avatarId
+    });
+
+    return res.json(deliveryman);
   }
 
   async update(req, res) {
@@ -58,7 +70,7 @@ class DeliverymanController {
     if (!deliveryman) {
       return res
         .status(400)
-        .json({ Error: "Verify deliveryman ID and try again" });
+        .json({ Error: 'Verify deliveryman ID and try again' });
     }
 
     const Schema = Yup.object().shape({
@@ -68,7 +80,7 @@ class DeliverymanController {
     });
 
     if (!(await Schema.isValid(req.body))) {
-      return res.status(400).json({ Error: "Validation fails" });
+      return res.status(400).json({ Error: 'Validation fails' });
     }
 
     const { email } = req.body;
@@ -79,7 +91,7 @@ class DeliverymanController {
       });
 
       if (deliverymanExists) {
-        return res.status(400).json({ Error: "Deliveryman already exists" });
+        return res.status(400).json({ Error: 'Deliveryman already exists' });
       }
     }
 
@@ -101,13 +113,13 @@ class DeliverymanController {
     if (!verifyDeliveryman) {
       return res
         .status(400)
-        .json({ Error: "Verify deliveryman id and try again" });
+        .json({ Error: 'Verify deliveryman id and try again' });
     }
     await Deliveryman.destroy({
       where: { id: deliverymanId }
     });
 
-    return res.json({ Success: "Deliveryman deleted" });
+    return res.json({ Success: 'Deliveryman deleted' });
   }
 }
 

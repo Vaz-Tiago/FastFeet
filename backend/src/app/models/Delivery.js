@@ -1,4 +1,4 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize, { Model } from 'sequelize';
 
 class Delivery extends Model {
   static init(sequelize) {
@@ -19,16 +19,16 @@ class Delivery extends Model {
 
   static associate(models) {
     this.belongsTo(models.Recipient, {
-      foreignKey: "recipient_id",
-      as: "recipient"
+      foreignKey: 'recipient_id',
+      as: 'recipient'
     });
     this.belongsTo(models.Deliveryman, {
-      foreignKey: "deliveryman_id",
-      as: "deliveryman"
+      foreignKey: 'deliveryman_id',
+      as: 'deliveryman'
     });
     this.belongsTo(models.FileSignature, {
-      foreignKey: "signature_id",
-      as: "signature"
+      foreignKey: 'signature_id',
+      as: 'signature'
     });
   }
 }

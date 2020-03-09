@@ -1,12 +1,12 @@
-import { Op } from "sequelize";
-import * as Yup from "yup";
-import { getHours, startOfDay, endOfDay } from "date-fns";
+import { Op } from 'sequelize';
+import * as Yup from 'yup';
+import { getHours, startOfDay, endOfDay } from 'date-fns';
 
-import Delivery from "../models/Delivery";
-import Deliveryman from "../models/Deliveryman";
-import FileAvatar from "../models/FileAvatar";
-import FileSignature from "../models/FileSignature";
-import Recipient from "../models/Recipient";
+import Delivery from '../models/Delivery';
+import Deliveryman from '../models/Deliveryman';
+import FileAvatar from '../models/FileAvatar';
+import FileSignature from '../models/FileSignature';
+import Recipient from '../models/Recipient';
 
 class OrderController {
   async show(req, res) {
@@ -18,28 +18,28 @@ class OrderController {
         deliveryman_id: deliveryman,
         [Op.and]: [{ end_date: null }, { canceled_at: null }]
       },
-      attributes: ["id", "product", "start_date", "end_date"],
+      attributes: ['id', 'product', 'start_date', 'end_date'],
       limit: 20,
       offset: (page - 1) * 20,
       include: [
         {
           model: Recipient,
-          as: "recipient",
+          as: 'recipient',
           attributes: [
-            "name",
-            "adress",
-            "number",
-            "complement",
-            "state",
-            "city",
-            "zipcode"
+            'name',
+            'adress',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zipcode'
           ]
         }
       ]
     });
 
     if (!orders) {
-      return res.json({ MSG: "There are no orders for you" });
+      return res.json({ MSG: 'There are no orders for you' });
     }
     return res.json(orders);
   }
@@ -53,14 +53,14 @@ class OrderController {
     });
 
     if (!schema.isValid(req.body)) {
-      return res.status(400).json({ Error: "Validate fails" });
+      return res.status(400).json({ Error: 'Validate fails' });
     }
 
     const order = await Delivery.findByPk(id);
     if (order.deliveryman_id !== deliveryman) {
       return res
         .status(400)
-        .json({ Error: "This delivery does not belong to you" });
+        .json({ Error: 'This delivery does not belong to you' });
     }
     if (
       !(
@@ -69,7 +69,7 @@ class OrderController {
         order.end_date === null
       )
     ) {
-      res.status(400).json({ Error: "This Delivery is unavailable" });
+      res.status(400).json({ Error: 'This Delivery is unavailable' });
     }
 
     const checkDeliveries = await Delivery.findAndCountAll({
@@ -86,14 +86,14 @@ class OrderController {
     if (checkDeliveries.count >= 5) {
       return res
         .status(400)
-        .json({ Error: "You can only make five deliveries a day" });
+        .json({ Error: 'You can only make five deliveries a day' });
     }
 
     const checkHour = getHours(new Date());
     if (checkHour < 8 || checkHour > 18) {
       return res
         .status(400)
-        .json({ Error: "You can only take an order between 8 am and 6 pm" });
+        .json({ Error: 'You can only take an order between 8 am and 6 pm' });
     }
 
     await order.update({ start_date: new Date() });
@@ -111,39 +111,39 @@ class OrderController {
     });
 
     if (!schema.isValid(req.body)) {
-      return res.status(400).json({ Error: "Validate fails" });
+      return res.status(400).json({ Error: 'Validate fails' });
     }
 
     const checkDeliveryman = await Deliveryman.findByPk(deliveryman);
 
     if (!checkDeliveryman) {
-      return res.status(400).json({ Error: "Deliveryman does not exists" });
+      return res.status(400).json({ Error: 'Deliveryman does not exists' });
     }
 
     let order = await Delivery.findByPk(delivery);
 
     // Check Delivery Exists
     if (!order) {
-      return res.status(400).json({ Error: "Delivery does not exists" });
+      return res.status(400).json({ Error: 'Delivery does not exists' });
     }
 
     // Check if deliveryman is really responsible of delivery
     if (order.deliveryman_id !== deliveryman) {
       return res
         .status(400)
-        .json({ Error: "You is not responsible for this delivery" });
+        .json({ Error: 'You is not responsible for this delivery' });
     }
 
     // Check if order is already started
     if (order.start_date === null) {
-      return res.status(400).json({ Error: "You need start delivery first" });
+      return res.status(400).json({ Error: 'You need start delivery first' });
     }
 
     // Check if order is already deliveried
     if (order.end_date !== null) {
       return res
         .status(400)
-        .json({ Error: "This order is already deliveried" });
+        .json({ Error: 'This order is already deliveried' });
     }
 
     const signature = await FileSignature.create({
@@ -154,7 +154,7 @@ class OrderController {
     if (!signature) {
       return res
         .status(500)
-        .json({ Error: "Something wrong with the signature upload" });
+        .json({ Error: 'Something wrong with the signature upload' });
     }
 
     await order.update({
@@ -163,35 +163,35 @@ class OrderController {
     });
 
     order = await Delivery.findByPk(delivery, {
-      attributes: ["id", "product", "start_date", "end_date"],
+      attributes: ['id', 'product', 'start_date', 'end_date'],
       include: [
         {
           model: FileSignature,
-          as: "signature",
-          attributes: ["id", "path", "url"]
+          as: 'signature',
+          attributes: ['id', 'path', 'url']
         },
         {
           model: Recipient,
-          as: "recipient",
+          as: 'recipient',
           attributes: [
-            "name",
-            "adress",
-            "number",
-            "complement",
-            "state",
-            "city",
-            "zipcode"
+            'name',
+            'adress',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zipcode'
           ]
         },
         {
           model: Deliveryman,
-          as: "deliveryman",
-          attributes: ["id", "name", "email"],
+          as: 'deliveryman',
+          attributes: ['id', 'name', 'email'],
           include: [
             {
               model: FileAvatar,
-              as: "avatar",
-              attributes: ["id", "path", "url"]
+              as: 'avatar',
+              attributes: ['id', 'path', 'url']
             }
           ]
         }
